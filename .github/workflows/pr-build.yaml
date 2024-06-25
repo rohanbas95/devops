@@ -6,7 +6,7 @@ on:
 
 env:
   NODE_VERSION: 20
-  LEVEL: level3
+  LEVEL: level4
 
 jobs:
   pr-build-api:
