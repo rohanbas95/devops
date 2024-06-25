@@ -103,3 +103,6 @@ npm run start
 (node:78219) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 (node:78219) [MONGODB DRIVER] Warning: Current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
+
+refer https://github.com/rohanbas95/devops/pull/2
+// added a git action workflow named pr-build to test the compilation and also added github permission on branches
