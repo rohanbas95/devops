@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   name: String
 });
 
-const User = mongoose.model('User', userchema);
+const User = mongoose.model('User', userSchema);
 
 // REST API
 app.get('/api/users', async (req, res) => {
