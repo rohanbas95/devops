@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid, CircularProgress } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getUsers, createUser, updateUser, deleteUser } from '../services/api';
@@ -7,14 +7,23 @@ import { getUsers, createUser, updateUser, deleteUser } from '../services/api';
 const UserList: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [newUserName, setNewUserName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
-    const data = await getUsers();
-    setUsers(data);
+    try {
+      const data = await getUsers();
+      setUsers(data);
+      setError(null);
+    } catch (error) {
+      setError('Failed to fetch users');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateUser = async () => {
@@ -65,22 +74,28 @@ const UserList: React.FC = () => {
             </Button>
           </Grid>
         </Grid>
-        <List>
-          {users.map(user => (
-            <ListItem key={user._id} secondaryAction={
-              <>
-                <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateUser(user._id)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteUser(user._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }>
-              <ListItemText primary={user.name} />
-            </ListItem>
-          ))}
-        </List>
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <List>
+            {users.map(user => (
+              <ListItem key={user._id} secondaryAction={
+                <>
+                  <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateUser(user._id)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteUser(user._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </>
+              }>
+                <ListItemText primary={user.name} />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Paper>
     </Container>
   );

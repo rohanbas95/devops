@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid, CircularProgress } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/api';
@@ -7,14 +7,23 @@ import { getProducts, createProduct, updateProduct, deleteProduct } from '../ser
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [newProductName, setNewProductName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
-    const data = await getProducts();
-    setProducts(data);
+    try {
+      const data = await getProducts();
+      setProducts(data);
+      setError(null);
+    } catch (error) {
+      setError('Failed to fetch products');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateProduct = async () => {
@@ -65,22 +74,28 @@ const ProductList: React.FC = () => {
             </Button>
           </Grid>
         </Grid>
-        <List>
-          {products.map(product => (
-            <ListItem key={product._id} secondaryAction={
-              <>
-                <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateProduct(product._id)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteProduct(product._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </>
-            }>
-              <ListItemText primary={product.name} />
-            </ListItem>
-          ))}
-        </List>
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <List>
+            {products.map(product => (
+              <ListItem key={product._id} secondaryAction={
+                <>
+                  <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateProduct(product._id)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteProduct(product._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </>
+              }>
+                <ListItemText primary={product.name} />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </Paper>
     </Container>
   );
