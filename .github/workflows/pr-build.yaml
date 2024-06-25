@@ -6,6 +6,7 @@ on:
 
 env:
   NODE_VERSION: 20
+  LEVEL: 3
 
 jobs:
   pr-build-api:
@@ -22,19 +23,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 🏗️ Build FrontEnd
-        working-directory: ./level1/frontend
+        working-directory: ./${{ env.LEVEL }}/frontend
         run: |
           npm install
           npm run build
 
       - name: 🏗️ Build Product-Service
-        working-directory: ./level1/product-service
+        working-directory: ./${{ env.LEVEL }}/product-service
         run: |
           npm install
           npm run build
 
       - name: 🏗️ Build User-Service
-        working-directory: ./level1/user-service
+        working-directory: ./${{ env.LEVEL }}/user-service
         run: |
           npm install
           npm run build
