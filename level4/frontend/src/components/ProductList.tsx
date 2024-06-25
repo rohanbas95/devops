@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid, CircularProgress } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, IconButton, Container, Typography, Paper, Grid, CircularProgress, Collapse } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/api';
+import { getProducts, createProduct, updateProduct, deleteProduct, getProductUsers } from '../services/api';
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [newProductName, setNewProductName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [productUsers, setProductUsers] = useState<{ [key: string]: any[] }>({});
+  const [expandedProducts, setExpandedProducts] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     fetchProducts();
@@ -47,6 +49,17 @@ const ProductList: React.FC = () => {
     fetchProducts();
   };
 
+  const handleFetchProductUsers = async (id: string) => {
+    if (expandedProducts[id]) {
+      setExpandedProducts((prev) => ({ ...prev, [id]: false }));
+      return;
+    }
+
+    const users = await getProductUsers(id);
+    setProductUsers((prev) => ({ ...prev, [id]: users }));
+    setExpandedProducts((prev) => ({ ...prev, [id]: true }));
+  };
+
   return (
     <Container>
       <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
@@ -81,18 +94,32 @@ const ProductList: React.FC = () => {
         ) : (
           <List>
             {products.map(product => (
-              <ListItem key={product._id} secondaryAction={
-                <>
-                  <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateProduct(product._id)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteProduct(product._id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </>
-              }>
-                <ListItemText primary={product.name} />
-              </ListItem>
+              <React.Fragment key={product._id}>
+                <ListItem secondaryAction={
+                  <>
+                    <IconButton edge="end" aria-label="edit" onClick={() => handleUpdateProduct(product._id)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteProduct(product._id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <Button onClick={() => handleFetchProductUsers(product._id)}>
+                      {expandedProducts[product._id] ? 'Hide Users' : 'View Users'}
+                    </Button>
+                  </>
+                }>
+                  <ListItemText primary={product.name} />
+                </ListItem>
+                <Collapse in={expandedProducts[product._id]} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding style={{ paddingLeft: '20px' }}>
+                    {productUsers[product._id] && productUsers[product._id].map(user => (
+                      <ListItem key={user._id}>
+                        <ListItemText primary={user.name} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
             ))}
           </List>
         )}

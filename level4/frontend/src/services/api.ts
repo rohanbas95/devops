@@ -44,6 +44,16 @@ export const deleteUser = async (id: string) => {
   }
 };
 
+export const getUserProducts = async (userId: string) => {
+  try {
+    const response = await api.get(`http://localhost:3001/api/users/${userId}/products`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user products:", error);
+    return [];
+  }
+};
+
 export const getProducts = async () => {
   try {
     const response = await api.get('http://localhost:3002/api/products');
@@ -81,5 +91,15 @@ export const deleteProduct = async (id: string) => {
   } catch (error) {
     console.error("Error deleting product:", error);
     return null;
+  }
+};
+
+export const getProductUsers = async (productId: string) => {
+  try {
+    const response = await api.get(`http://localhost:3002/api/products/${productId}/user`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching product users:", error);
+    return [];
   }
 };
