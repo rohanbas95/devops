@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import axios from 'axios';
 
 const app = express();
 const port = 3002;
@@ -41,6 +42,16 @@ app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   await Product.findByIdAndDelete(id);
   res.sendStatus(204);
+});
+
+// Example: Get user info for a product
+app.get('/api/products/:id/user', async (req, res) => {
+  try {
+    const response = await axios.get('http://localhost:3001/api/users');
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
 
 app.listen(port, () => {
