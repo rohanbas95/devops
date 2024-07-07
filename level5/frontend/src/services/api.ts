@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api'
 });
 
 export const getUsers = async () => {
   try {
-    const response = await api.get('http://localhost:3001/api/users');
+    const response = await api.get('https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/users');
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -16,7 +16,7 @@ export const getUsers = async () => {
 
 export const createUser = async (user: { name: string }) => {
   try {
-    const response = await api.post('http://localhost:3001/api/users', user);
+    const response = await api.post('https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/users', user);
     return response.data;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -26,7 +26,7 @@ export const createUser = async (user: { name: string }) => {
 
 export const updateUser = async (id: string, user: { name: string }) => {
   try {
-    const response = await api.put(`http://localhost:3001/api/users/${id}`, user);
+    const response = await api.put(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/users/${id}`, user);
     return response.data;
   } catch (error) {
     console.error("Error updating user:", error);
@@ -36,7 +36,7 @@ export const updateUser = async (id: string, user: { name: string }) => {
 
 export const deleteUser = async (id: string) => {
   try {
-    const response = await api.delete(`http://localhost:3001/api/users/${id}`);
+    const response = await api.delete(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/users/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting user:", error);
@@ -46,7 +46,7 @@ export const deleteUser = async (id: string) => {
 
 export const getUserProducts = async (userId: string) => {
   try {
-    const response = await api.get(`http://localhost:3001/api/users/${userId}/products`);
+    const response = await api.get(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/users/${userId}/products`);
     return response.data;
   } catch (error) {
     console.error("Error fetching user products:", error);
@@ -56,7 +56,7 @@ export const getUserProducts = async (userId: string) => {
 
 export const getProducts = async () => {
   try {
-    const response = await api.get('http://localhost:3002/api/products');
+    const response = await api.get('https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/products');
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -66,7 +66,7 @@ export const getProducts = async () => {
 
 export const createProduct = async (product: { name: string }) => {
   try {
-    const response = await api.post('http://localhost:3002/api/products', product);
+    const response = await api.post('https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/products', product);
     return response.data;
   } catch (error) {
     console.error("Error creating product:", error);
@@ -76,7 +76,7 @@ export const createProduct = async (product: { name: string }) => {
 
 export const updateProduct = async (id: string, product: { name: string }) => {
   try {
-    const response = await api.put(`http://localhost:3002/api/products/${id}`, product);
+    const response = await api.put(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/products/${id}`, product);
     return response.data;
   } catch (error) {
     console.error("Error updating product:", error);
@@ -86,7 +86,7 @@ export const updateProduct = async (id: string, product: { name: string }) => {
 
 export const deleteProduct = async (id: string) => {
   try {
-    const response = await api.delete(`http://localhost:3002/api/products/${id}`);
+    const response = await api.delete(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/products/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -96,7 +96,7 @@ export const deleteProduct = async (id: string) => {
 
 export const getProductUsers = async (productId: string) => {
   try {
-    const response = await api.get(`http://localhost:3002/api/products/${productId}/user`);
+    const response = await api.get(`https://97jhanq0wd.execute-api.ap-south-1.amazonaws.com/prod/api/products/${productId}/user`);
     return response.data;
   } catch (error) {
     console.error("Error fetching product users:", error);

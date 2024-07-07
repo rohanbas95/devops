@@ -3,10 +3,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
+import serverless from 'serverless-http';
 import axios from 'axios';
 
 const app = express();
-const port = 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -16,7 +16,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
   region: 'ap-south-1' // Replace with your AWS region
 });
 
-const TABLE_NAME = 'userdb'; // Replace with your DynamoDB table name
+const TABLE_NAME = 'userdb-rohan'; // Replace with your DynamoDB table name
 
 // REST API
 app.get('/api/users', async (req, res) => {
@@ -85,13 +85,11 @@ app.delete('/api/users/:id', async (req, res) => {
 // Example: Get all products for a user
 app.get('/api/users/:id/products', async (req, res) => {
   try {
-    const response = await axios.get('http://localhost:3002/api/products');
+    const response = await axios.get('https://n3ocaa5sxg.execute-api.ap-south-1.amazonaws.com/prod/api/products');
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
-app.listen(port, () => {
-  console.log(`User service listening at http://localhost:${port}`);
-});
+export const handler = serverless(app);
