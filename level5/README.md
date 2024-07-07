@@ -1,1 +1,1 @@
-updated code to use dynamo db from local laptop
+updated code to use dynamo db from local 
