@@ -1,0 +1,1 @@
+updated code to use dynamo db from local 
