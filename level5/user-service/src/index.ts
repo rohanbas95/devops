@@ -4,7 +4,7 @@ import cors from 'cors';
 import AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import serverless from 'serverless-http';
-import axios from 'axios';
+import axios from 'axio
 
 const app = express();
 
